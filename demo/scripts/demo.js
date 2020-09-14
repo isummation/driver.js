@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', function () {
         className: 'scoped-driver-popover',
         title: 'Before we start',
         description: 'This is just one use-case, make sure to check out the rest of the docs below.',
-        nextBtnText: 'Okay, Start!',
+        // nextBtnText: 'Okay, Start!',
+        nextBtnText: '',
       },
     }, {
       element: '#logo_img',
@@ -96,6 +97,9 @@ document.addEventListener('DOMContentLoaded', function () {
     opacity: 0.8,
     padding: 5,
     showButtons: true,
+    autoplay: () => {
+      console.log('here.............');
+    }
   });
 
   const boringTourDriver = new Driver({
@@ -138,9 +142,9 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
 
-/////////////////////////////////////////////
-// First example – highlighting without popover
-/////////////////////////////////////////////
+  /////////////////////////////////////////////
+  // First example – highlighting without popover
+  /////////////////////////////////////////////
   const singleDriverNoPopover = new Driver();
   document.querySelector('#run-single-element-no-popover')
     .addEventListener('click', (e) => {
@@ -148,9 +152,9 @@ document.addEventListener('DOMContentLoaded', function () {
       singleDriverNoPopover.highlight('#single-element-no-popover');
     });
 
-/////////////////////////////////////////////
-// Form focus examples
-/////////////////////////////////////////////
+  /////////////////////////////////////////////
+  // Form focus examples
+  /////////////////////////////////////////////
   const focusDriver = new Driver({ padding: 0 });
   const inputIds = ['creation-input', 'creation-input-2', 'creation-input-3', 'creation-input-4'];
   inputIds.forEach(inputId => {
@@ -161,9 +165,9 @@ document.addEventListener('DOMContentLoaded', function () {
       });
   });
 
-/////////////////////////////////////////////
-// Highlighting single element with popover
-/////////////////////////////////////////////
+  /////////////////////////////////////////////
+  // Highlighting single element with popover
+  /////////////////////////////////////////////
   const singleDriverWithPopover = new Driver();
   document.querySelector('#run-single-element-with-popover')
     .addEventListener('click', (e) => {
@@ -179,9 +183,9 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
 
-/////////////////////////////////////////////////////
-// Highlighting single element with popover position
-/////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////
+  // Highlighting single element with popover position
+  /////////////////////////////////////////////////////
   const singleDriverWithPopoverPosition = new Driver();
   document.querySelector('#run-single-element-with-popover-position')
     .addEventListener('click', (e) => {
@@ -198,9 +202,9 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
 
-/////////////////////////////////////////////////////
-// Highlighting single element with popover position
-/////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////
+  // Highlighting single element with popover position
+  /////////////////////////////////////////////////////
   const positionBtnsDriver = new Driver({
     padding: 0,
   });
@@ -223,11 +227,11 @@ document.addEventListener('DOMContentLoaded', function () {
           position: alignment
         }
       });
-    })
+    });
 
-/////////////////////////////////////////////////////
-// Highlighting single element with popover position
-/////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////
+  // Highlighting single element with popover position
+  /////////////////////////////////////////////////////
   const htmlDriver = new Driver();
 
   document.querySelector('#run-single-element-with-popover-html')
@@ -245,9 +249,9 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
 
-/////////////////////////////////////////////////////
-// Without Overlay Example
-/////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////
+  // Without Overlay Example
+  /////////////////////////////////////////////////////
   const withoutOverlay = new Driver({
     opacity: 0,
     padding: 0
@@ -267,9 +271,9 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
 
-/////////////////////////////////////////////
-// Single no close demo
-/////////////////////////////////////////////
+  /////////////////////////////////////////////
+  // Single no close demo
+  /////////////////////////////////////////////
   const singleNoClose = new Driver({
     allowClose: false,
     position: 'top'
@@ -296,9 +300,9 @@ document.addEventListener('DOMContentLoaded', function () {
       singleNoClose.start();
     });
 
-/////////////////////////////////////////////////////
-// Highlighting single element with popover position
-/////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////
+  // Highlighting single element with popover position
+  /////////////////////////////////////////////////////
   const featureIntroductionDriver = new Driver();
   featureIntroductionDriver.defineSteps([
     {

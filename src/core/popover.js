@@ -2,6 +2,7 @@ import Element from './element';
 import {
   CLASS_BTN_DISABLED,
   CLASS_CLOSE_BTN,
+  CLASS_AUTOPLAY_BTN,
   CLASS_CLOSE_ONLY_BTN,
   CLASS_NEXT_STEP_BTN,
   CLASS_POPOVER_DESCRIPTION,
@@ -33,11 +34,17 @@ export default class Popover extends Element {
       currentIndex: 0,
       offset: 0,
       showButtons: true,
-      closeBtnText: 'Close',
+      // closeBtnText: 'Close',
+      // doneBtnText: 'Done',
+      // startBtnText: 'Next &rarr;',
+      // nextBtnText: 'Next &rarr;',
+      // prevBtnText: '&larr; Previous',
+
+      closeBtnText: '',
       doneBtnText: 'Done',
-      startBtnText: 'Next &rarr;',
-      nextBtnText: 'Next &rarr;',
-      prevBtnText: '&larr; Previous',
+      startBtnText: '',
+      nextBtnText: '',
+      prevBtnText: '',
       ...options,
     };
 
@@ -66,6 +73,7 @@ export default class Popover extends Element {
     this.nextBtnNode = popover.querySelector(`.${CLASS_NEXT_STEP_BTN}`);
     this.prevBtnNode = popover.querySelector(`.${CLASS_PREV_STEP_BTN}`);
     this.closeBtnNode = popover.querySelector(`.${CLASS_CLOSE_BTN}`);
+    this.autoplayBtnNode = popover.querySelector(`.${CLASS_AUTOPLAY_BTN}`);
   }
 
   /**

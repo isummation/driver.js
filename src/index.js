@@ -3,6 +3,7 @@ import Element from './core/element';
 import Popover from './core/popover';
 import {
   CLASS_CLOSE_BTN,
+  CLASS_AUTOPLAY_BTN,
   CLASS_NEXT_STEP_BTN,
   CLASS_PREV_STEP_BTN,
   ESC_KEY_CODE,
@@ -42,6 +43,7 @@ export default class Driver {
       onReset: () => null,              // When overlay is about to be cleared
       onNext: () => null,               // When next button is clicked
       onPrevious: () => null,           // When previous button is clicked
+      autoplay: () => null,           // When previous button is clicked
       ...options,
     };
 
@@ -137,6 +139,7 @@ export default class Driver {
     }
 
     const nextClicked = e.target.classList.contains(CLASS_NEXT_STEP_BTN);
+    const autoplayClicked = e.target.classList.contains(CLASS_AUTOPLAY_BTN);
     const prevClicked = e.target.classList.contains(CLASS_PREV_STEP_BTN);
     const closeClicked = e.target.classList.contains(CLASS_CLOSE_BTN);
 
@@ -149,6 +152,8 @@ export default class Driver {
       this.handleNext();
     } else if (prevClicked) {
       this.handlePrevious();
+    } else if (autoplayClicked) {
+      this.handleAutoplay();
     }
   }
 
@@ -247,6 +252,16 @@ export default class Driver {
 
     this.moveNext();
   }
+
+  /**
+ * Handles the internal "move to next" event
+ * @private
+ */
+  handleAutoplay() {
+    const currentStep = this.steps[this.currentStep];
+    currentStep.options.autoplay();
+  }
+
 
   /**
    * Handles the internal "move to previous" event

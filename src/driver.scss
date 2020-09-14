@@ -29,7 +29,7 @@ div#driver-popover-item {
 
   .driver-popover-tip {
     border: 5px solid $popover-bg;
-    content: '';
+    content: "";
     position: absolute;
 
     &.bottom {
@@ -116,7 +116,7 @@ div#driver-popover-item {
       text-decoration: none;
       text-shadow: 1px 1px 0 #fff;
       color: $text-color;
-      font: 11px/normal sans-serif;
+      font: 11px / normal sans-serif;
       cursor: pointer;
       outline: 0;
       background-color: $button-bg;
@@ -131,21 +131,99 @@ div#driver-popover-item {
       pointer-events: none;
     }
 
-    .driver-close-btn {
-      float: left;
-    }
-
-    .driver-close-only-btn {
-      float: right;
-    }
-
     .driver-btn-group {
-      float: right;
+      display: flex;
+      justify-content: center;
+      .driver-close-btn {
+        margin-right: 0.25rem;
+        border-radius: 50%;
+        background: transparent;
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #9e0000;
+        &::before {
+          font-family: FontAwesome;
+          font-family: "Font Awesome 5 Pro";
+          font-weight: 900;
+          content: "\f04d";
+        }
+      }
+
+      .driver-close-only-btn {
+        margin-right: 0.25rem;
+        border-radius: 50%;
+        background: transparent;
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #9e0000;
+        &::before {
+          // font-family: FontAwesome;
+          font-family: "Font Awesome 5 Pro";
+          font-weight: 900;
+          content: "\f04d";
+        }
+      }
+
+      .driver-autoplay-btn {
+        margin-right: 0.25rem;
+        border-radius: 50%;
+        background: transparent;
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &::before {
+          font-family: FontAwesome;
+          font-family: "Font Awesome 5 Pro";
+          font-weight: 900;
+          content: "\f04b";
+        }
+      }
+
+      .driver-prev-btn {
+        margin-right: 0.25rem;
+        border-radius: 50%;
+        background: transparent;
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &::before {
+          font-family: FontAwesome;
+          font-family: "Font Awesome 5 Pro";
+          font-weight: 900;
+          content: "\f04a";
+        }
+      }
+      .driver-next-btn {
+        margin-right: 0.25rem;
+        border-radius: 50%;
+        background: transparent;
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &::before {
+          font-family: FontAwesome;
+          font-family: "Font Awesome 5 Pro";
+          font-weight: 900;
+          content: "\f04e";
+        }
+      }
     }
   }
 
   .driver-popover-title {
-    font: 19px/normal sans-serif;
+    font: 19px / normal sans-serif;
     margin: 0 0 5px;
     font-weight: bold;
     display: block;
@@ -156,7 +234,7 @@ div#driver-popover-item {
 
   .driver-popover-description {
     margin-bottom: 0;
-    font: 14px/normal sans-serif;
+    font: 14px / normal sans-serif;
     line-height: 1.5;
     color: $text-color;
     font-weight: normal;
@@ -224,7 +302,7 @@ div#driver-highlighted-element-stage {
 
 .driver-fix-stacking {
   z-index: auto !important;
-  opacity: 1.0 !important;
+  opacity: 1 !important;
   transform: none !important;
   filter: none !important;
   perspective: none !important;

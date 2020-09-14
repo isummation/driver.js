@@ -24,6 +24,7 @@ export const CLASS_POPOVER_TITLE = 'driver-popover-title';
 export const CLASS_POPOVER_DESCRIPTION = 'driver-popover-description';
 export const CLASS_POPOVER_FOOTER = 'driver-popover-footer';
 export const CLASS_CLOSE_BTN = 'driver-close-btn';
+export const CLASS_AUTOPLAY_BTN = 'driver-autoplay-btn';
 export const CLASS_NEXT_STEP_BTN = 'driver-next-btn';
 export const CLASS_PREV_STEP_BTN = 'driver-prev-btn';
 export const CLASS_BTN_DISABLED = 'driver-disabled';
@@ -40,9 +41,10 @@ export const POPOVER_HTML = (className = '') => `
     <div class="${CLASS_POPOVER_TITLE}">Popover Title</div>
     <div class="${CLASS_POPOVER_DESCRIPTION}">Popover Description</div>
     <div class="driver-clearfix ${CLASS_POPOVER_FOOTER}">
-      <button class="${CLASS_CLOSE_BTN}">Close</button>
-      <span class="driver-btn-group ${CLASS_NAVIGATION_BTNS}">
+    <span class="driver-btn-group ${CLASS_NAVIGATION_BTNS}">
         <button class="${CLASS_PREV_STEP_BTN}">&larr; Previous</button>
+        <button class="${CLASS_AUTOPLAY_BTN}"></button>
+        <button class="${CLASS_CLOSE_BTN}">Close</button>
         <button class="${CLASS_NEXT_STEP_BTN}">Next &rarr;</button>
       </span>
     </div>
