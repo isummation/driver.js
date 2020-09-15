@@ -185,6 +185,11 @@ div#driver-popover-item {
           font-weight: 900;
           content: "\f04b";
         }
+        &.pause {
+          &::before {
+            content: "\f04c";
+          }
+        }
       }
 
       .driver-prev-btn {

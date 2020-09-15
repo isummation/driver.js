@@ -259,6 +259,13 @@ export default class Driver {
  */
   handleAutoplay() {
     const currentStep = this.steps[this.currentStep];
+    const autoplayBtn = document.getElementsByClassName(CLASS_AUTOPLAY_BTN)[0];
+    const classList = autoplayBtn.classList;
+    if (classList.contains('pause')) {
+      autoplayBtn.classList.remove('pause');
+    } else {
+      autoplayBtn.classList.add('pause');
+    }
     currentStep.options.autoplay();
   }
 
