@@ -27,10 +27,21 @@ div#driver-popover-item {
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.4);
   z-index: $popover-z-index;
 
+  // custom style for fa
+  left: 50% !important;
+  bottom: 0 !important;
+  transform: translateX(-50%) !important;
+  top: auto !important;
+  // custom style for fa
+
   .driver-popover-tip {
     border: 5px solid $popover-bg;
     content: "";
     position: absolute;
+
+    // custom style for fa
+    display: none !important;
+    // custom style for fa
 
     &.bottom {
       bottom: -10px;
@@ -183,11 +194,11 @@ div#driver-popover-item {
           font-family: FontAwesome;
           font-family: "Font Awesome 5 Pro";
           font-weight: 900;
-          content: "\f04b";
+          content: "\f04c";
         }
         &.pause {
           &::before {
-            content: "\f04c";
+            content: "\f04b";
           }
         }
       }
