@@ -37,13 +37,14 @@ export default class Driver {
       keyboardControl: ALLOW_KEYBOARD_CONTROL,     // Whether to allow controlling through keyboard or not
       overlayClickNext: SHOULD_OUTSIDE_CLICK_NEXT, // Whether to move next on click outside the element
       stageBackground: '#ffffff',       // Background color for the stage
+      autoplay: false,       // Background color for the stage
       onHighlightStarted: () => null,   // When element is about to be highlighted
       onHighlighted: () => null,        // When element has been highlighted
       onDeselected: () => null,         // When the element has been deselected
       onReset: () => null,              // When overlay is about to be cleared
       onNext: () => null,               // When next button is clicked
       onPrevious: () => null,           // When previous button is clicked
-      autoplay: () => null,           // When previous button is clicked
+      onAutoplay: () => null,           // When autoplay button is clicked
       ...options,
     };
 
@@ -53,6 +54,7 @@ export default class Driver {
     this.steps = [];                    // steps to be presented if any
     this.currentStep = 0;               // index for the currently highlighted step
     this.currentMovePrevented = false;  // If the current move was prevented
+    this.stepAutomation = [];
 
     this.overlay = new Overlay(this.options, window, document);
 
@@ -149,11 +151,23 @@ export default class Driver {
     }
 
     if (nextClicked) {
+      this.stepAutomation[this.currentStep].clear();
       this.handleNext();
+      this.handleAutoplay();
     } else if (prevClicked) {
       this.handlePrevious();
-    } else if (autoplayClicked) {
+      this.stepAutomation[this.currentStep].clear();
       this.handleAutoplay();
+    } else if (autoplayClicked) {
+      this.options.autoplay = !this.options.autoplay;
+      this.options.onAutoplay(this.options.autoplay);
+      if (this.options.autoplay) {
+        // this.handleAutoplay();
+        this.stepAutomation[this.currentStep].resume();
+      } else {
+        this.stepAutomation[this.currentStep].pause();
+      }
+      this.updatePlayButton();
     }
   }
 
@@ -222,6 +236,9 @@ export default class Driver {
 
     this.overlay.highlight(previousStep);
     this.currentStep -= 1;
+    setTimeout(() => {
+      this.updatePlayButton();
+    }, 500);
   }
 
   /**
@@ -258,15 +275,41 @@ export default class Driver {
  * @private
  */
   handleAutoplay() {
-    const currentStep = this.steps[this.currentStep];
+    this.updatePlayButton();
+    if (this.options.autoplay && this.options.steps[this.currentStep]) {
+      this.stepAutomation[this.currentStep] = new this.Timer(() => {
+        if (this.options.autoplay) {
+          this.moveNext();
+          if (this.currentStep < this.steps.length - 1) {
+            console.log(this.currentStep);
+            this.handleAutoplay();
+          } else {
+            setTimeout(() => {
+              this.reset();
+            }, this.options.steps[this.currentStep].duration * 1000);
+          }
+        }
+      }, this.options.steps[this.currentStep].duration * 1000);
+    }
+  }
+
+
+  clearStepAutomation() {
+    this.stepAutomation.map(timer => timer.clear());
+  }
+
+
+  /**
+  * Updates play/pause button icon
+  * @private
+  */
+  updatePlayButton() {
     const autoplayBtn = document.getElementsByClassName(CLASS_AUTOPLAY_BTN)[0];
-    const classList = autoplayBtn.classList;
-    if (classList.contains('pause')) {
+    if (this.options.autoplay) {
       autoplayBtn.classList.remove('pause');
     } else {
       autoplayBtn.classList.add('pause');
     }
-    currentStep.options.autoplay();
   }
 
 
@@ -304,6 +347,9 @@ export default class Driver {
 
     this.overlay.highlight(nextStep);
     this.currentStep += 1;
+    setTimeout(() => {
+      this.updatePlayButton();
+    }, 500);
   }
 
   /**
@@ -367,6 +413,7 @@ export default class Driver {
    * @public
    */
   defineSteps(steps) {
+    this.options.steps = steps;
     this.steps = [];
 
     for (let counter = 0; counter < steps.length; counter++) {
@@ -430,7 +477,7 @@ export default class Driver {
         isLast: allSteps.length === 0 || index === allSteps.length - 1, // Only one item or last item
       };
 
-      popover = new Popover(popoverOptions, this.window, this.document);
+      popover = new Popover(popoverOptions, this.window, this.document, this.steps);
     }
 
     const stageOptions = { ...elementOptions };
@@ -460,6 +507,12 @@ export default class Driver {
     this.isActivated = true;
     this.currentStep = index;
     this.overlay.highlight(this.steps[index]);
+
+    if (this.options.autoplay) {
+      setTimeout(() => {
+        this.handleAutoplay();
+      }, 100);
+    }
   }
 
   /**
@@ -476,5 +529,28 @@ export default class Driver {
     }
 
     this.overlay.highlight(element);
+  }
+
+  Timer(callback, delay) {
+    let timerId;
+    let start;
+    let remaining = delay;
+
+    this.pause = () => {
+      window.clearTimeout(timerId);
+      remaining -= Date.now() - start;
+    };
+
+    this.resume = () => {
+      start = Date.now();
+      window.clearTimeout(timerId);
+      timerId = window.setTimeout(callback, remaining);
+    };
+
+    this.clear = () => {
+      window.clearTimeout(timerId);
+    };
+
+    this.resume();
   }
 }

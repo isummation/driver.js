@@ -24,7 +24,7 @@ export default class Popover extends Element {
    * @param {Window} window
    * @param {Document} document
    */
-  constructor(options, window, document) {
+  constructor(options, window, document, steps) {
     super();
 
     this.options = {
@@ -45,6 +45,7 @@ export default class Popover extends Element {
       startBtnText: '',
       nextBtnText: '',
       prevBtnText: '',
+      steps,
       ...options,
     };
 

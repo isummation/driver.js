@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const tourSteps = [
     {
       element: document.getElementById('driver-demo-head'),
+      duration: 3,
       popover: {
         className: 'scoped-driver-popover',
         title: 'Before we start',
@@ -14,82 +15,95 @@ document.addEventListener('DOMContentLoaded', function () {
       },
     }, {
       element: '#logo_img',
+      duration: 3,
       popover: {
         title: 'Focus Anything',
         description: 'You can use it to highlight literally anything, images, text, div, span, li etc.',
       },
-    }, {
-      element: '#name_driver',
-      popover: {
-        title: 'Why Driver?',
-        description: 'Because it lets you drive the user across the page',
-      }
-    }, {
-      element: '#driver-demo-head',
-      popover: {
-        title: 'Let\'s talk features',
-        description: 'You may leave your mouse and use the <strong>arrow keys</strong> to move next and back or <strong>escape key</strong> anytime to close this',
-        position: 'bottom'
-      }
-    }, {
-      element: '#highlight_feature',
-      popover: {
-        title: 'Highlight Feature',
-        description: 'You may use it to highlight single elements (with or without popover) e.g. like facebook does while creating posts',
-      }
-    }, {
-      element: '#feature_introductions_feature',
-      popover: {
-        title: 'Feature Introductions',
-        description: 'With it\'s powerful API you can use it to make programmatic or user driven feature introductions',
-        position: 'bottom'
-      }
-    }, {
-      element: '#focus_shifters_feature',
-      popover: {
-        title: 'Focus Shifters',
-        description: 'If some element or part of the page needs user\'s interaction, you can just call the highlight method. Driver will take care of driving the user there',
-        position: 'bottom'
-      }
-    }, {
-      element: '#customizable_feature',
-      popover: {
-        title: 'Highly Customizable',
-        description: 'Driver has a powerful API allowing you to customize the experience as much as you can.',
-        position: 'bottom'
-      }
-    }, {
-      element: '#keyboard_feature',
-      popover: {
-        title: 'User Friendly',
-        description: 'Your users can control it with the arrow keys on keyboard, or escape to close it',
-        position: 'bottom'
-      }
-    }, {
-      element: '#free_use_feature',
-      popover: {
-        title: 'MIT License',
-        description: 'I believe in open-source and thus Driver is completely free for both personal or commercial use'
-      }
-    }, {
-      element: '#lightweight_feature',
-      popover: {
-        title: 'Only ~4KB',
-        description: 'Driver is free of bloat and written in Vanilla JS. There is no external dependency at all, thus keeping it smaller in size.'
-      }
-    }, {
-      element: '#examples_section',
-      popover: {
-        title: 'Usage Examples',
-        description: 'Have a look at the usage examples and see how you can use it.'
-      }
-    }, {
-      element: '#driver-demo-head',
-      popover: {
-        title: 'Quick Tour Ends',
-        description: 'This was just a sneak peak, have a look at the API section and examples to learn more!'
-      }
-    }
+    },
+    //  {
+    //   element: '#name_driver',
+    //   popover: {
+    //     title: 'Why Driver?',
+    //     description: 'Because it lets you drive the user across the page',
+    //     duration: 3
+    //   }
+    // }, {
+    //   element: '#driver-demo-head',
+    //   popover: {
+    //     title: 'Let\'s talk features',
+    //     description: 'You may leave your mouse and use the <strong>arrow keys</strong> to move next and back or <strong>escape key</strong> anytime to close this',
+    //     position: 'bottom',
+    //     duration: 3
+    //   }
+    // }, {
+    //   element: '#highlight_feature',
+    //   popover: {
+    //     title: 'Highlight Feature',
+    //     description: 'You may use it to highlight single elements (with or without popover) e.g. like facebook does while creating posts',
+    //     duration: 3
+    //   }
+    // }, {
+    //   element: '#feature_introductions_feature',
+    //   popover: {
+    //     title: 'Feature Introductions',
+    //     description: 'With it\'s powerful API you can use it to make programmatic or user driven feature introductions',
+    //     position: 'bottom',
+    //     duration: 3
+    //   }
+    // }, {
+    //   element: '#focus_shifters_feature',
+    //   popover: {
+    //     title: 'Focus Shifters',
+    //     description: 'If some element or part of the page needs user\'s interaction, you can just call the highlight method. Driver will take care of driving the user there',
+    //     position: 'bottom',
+    //     duration: 3
+    //   }
+    // }, {
+    //   element: '#customizable_feature',
+    //   popover: {
+    //     title: 'Highly Customizable',
+    //     description: 'Driver has a powerful API allowing you to customize the experience as much as you can.',
+    //     position: 'bottom',
+    //     duration: 3
+    //   }
+    // }, {
+    //   element: '#keyboard_feature',
+    //   popover: {
+    //     title: 'User Friendly',
+    //     description: 'Your users can control it with the arrow keys on keyboard, or escape to close it',
+    //     position: 'bottom',
+    //     duration: 3
+    //   }
+    // }, {
+    //   element: '#free_use_feature',
+    //   popover: {
+    //     title: 'MIT License',
+    //     description: 'I believe in open-source and thus Driver is completely free for both personal or commercial use',
+    //     duration: 3
+    //   }
+    // }, {
+    //   element: '#lightweight_feature',
+    //   popover: {
+    //     title: 'Only ~4KB',
+    //     description: 'Driver is free of bloat and written in Vanilla JS. There is no external dependency at all, thus keeping it smaller in size.',
+    //     duration: 3
+    //   }
+    // }, {
+    //   element: '#examples_section',
+    //   popover: {
+    //     title: 'Usage Examples',
+    //     description: 'Have a look at the usage examples and see how you can use it.',
+    //     duration: 3
+    //   }
+    // }, {
+    //   element: '#driver-demo-head',
+    //   popover: {
+    //     title: 'Quick Tour Ends',
+    //     description: 'This was just a sneak peak, have a look at the API section and examples to learn more!',
+    //     duration: 3
+    //   }
+    // }
   ];
 
   const animatedTourDriver = new Driver({
@@ -97,7 +111,8 @@ document.addEventListener('DOMContentLoaded', function () {
     opacity: 0.8,
     padding: 5,
     showButtons: true,
-    autoplay: () => {
+    autoplay: true,
+    onAutoplay: () => {
       console.log('here.............');
     }
   });
