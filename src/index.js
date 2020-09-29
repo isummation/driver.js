@@ -281,7 +281,6 @@ export default class Driver {
         if (this.options.autoplay) {
           this.moveNext();
           if (this.currentStep < this.steps.length - 1) {
-            console.log(this.currentStep);
             this.handleAutoplay();
           } else {
             setTimeout(() => {
@@ -376,6 +375,7 @@ export default class Driver {
   reset(immediate = false) {
     this.currentStep = 0;
     this.isActivated = false;
+    this.stepAutomation[this.currentStep].clear();
     this.overlay.clear(immediate);
   }
 

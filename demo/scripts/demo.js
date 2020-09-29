@@ -111,6 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
     opacity: 0.8,
     padding: 5,
     showButtons: true,
+    stageBackground: "#20a8d8",
     autoplay: true,
     onAutoplay: () => {
       console.log('here.............');
