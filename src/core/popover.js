@@ -6,6 +6,8 @@ import {
   CLASS_CLOSE_ONLY_BTN,
   CLASS_NEXT_STEP_BTN,
   CLASS_POPOVER_DESCRIPTION,
+  CLASS_POPOVER_AUDIO,
+  CLASS_POPOVER_VIDEO,
   CLASS_POPOVER_FOOTER,
   CLASS_POPOVER_TIP,
   CLASS_POPOVER_TITLE,
@@ -69,6 +71,8 @@ export default class Popover extends Element {
     this.tipNode = popover.querySelector(`.${CLASS_POPOVER_TIP}`);
     this.titleNode = popover.querySelector(`.${CLASS_POPOVER_TITLE}`);
     this.descriptionNode = popover.querySelector(`.${CLASS_POPOVER_DESCRIPTION}`);
+    this.audioNode = popover.querySelector(`.${CLASS_POPOVER_AUDIO}`);
+    this.videoNode = popover.querySelector(`.${CLASS_POPOVER_VIDEO}`);
     this.footerNode = popover.querySelector(`.${CLASS_POPOVER_FOOTER}`);
     this.nextBtnNode = popover.querySelector(`.${CLASS_NEXT_STEP_BTN}`);
     this.prevBtnNode = popover.querySelector(`.${CLASS_PREV_STEP_BTN}`);
@@ -81,9 +85,11 @@ export default class Popover extends Element {
     const progressBar = document.createElement('div');
     progressBar.style.display = 'flex';
     progressBar.style.height = '10px';
-    progressBar.style.border = '1px solid';
+    // progressBar.style.border = '1px solid';
+    progressBar.style.backgroundColor = '#ddd';
+    progressBar.style.marginTop = '0.5rem';
     for (let stepCount = 0; stepCount < this.options.steps.length; stepCount++) {
-      progressBar.appendChild(this.getProgressSegment());
+      // progressBar.appendChild(this.getProgressSegment());
     }
     return progressBar;
   }
@@ -91,7 +97,8 @@ export default class Popover extends Element {
   getProgressSegment() {
     const progressSegment = document.createElement('div');
     progressSegment.style.flex = 1;
-    progressSegment.style.backgroundColor = '#20a8d8';
+    progressSegment.style.border = '1px solid #b2b2b2';
+    // progressSegment.style.backgroundColor = '#20a8d8';
     progressSegment.style.marginRight = '2px';
     return progressSegment;
   }
@@ -112,6 +119,24 @@ export default class Popover extends Element {
    */
   getDescriptionNode() {
     return this.descriptionNode;
+  }
+
+  /**
+  * Gets the audio node for the popover
+  * @returns {Element | null | *}
+  * @public
+  */
+  getAudioNode() {
+    return this.audioNode;
+  }
+
+  /**
+* Gets the audio node for the popover
+* @returns {Element | null | *}
+* @public
+*/
+  getVideoNode() {
+    return this.videoNode;
   }
 
   /**
@@ -156,6 +181,16 @@ export default class Popover extends Element {
     // Set the title and descriptions
     this.titleNode.innerHTML = this.options.title;
     this.descriptionNode.innerHTML = this.options.description || '';
+
+    this.audioNode.innerHTML = this.options.audio ? `<audio autoplay id="audio${this.options.currentIndex}">
+    <source src="${this.options.audio}" type="audio/wav">
+    Your browser does not support the audio element.
+    </audio>` : '';
+
+    this.videoNode.innerHTML = this.options.video ? `<video autoplay id="video${this.options.currentIndex}">
+    <source src="${this.options.video}" type="mp4/ogg">
+    Your browser does not support the audio element.
+    </video>` : '';
 
     this.renderFooter();
 

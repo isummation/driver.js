@@ -44,7 +44,6 @@ export default class Driver {
       onReset: () => null,              // When overlay is about to be cleared
       onNext: () => null,               // When next button is clicked
       onPrevious: () => null,           // When previous button is clicked
-      onAutoplay: () => null,           // When autoplay button is clicked
       ...options,
     };
 
@@ -152,22 +151,112 @@ export default class Driver {
 
     if (nextClicked) {
       this.stepAutomation[this.currentStep].clear();
+      this.stopMedia(this.currentStep);
       this.handleNext();
-      this.handleAutoplay();
+      setTimeout(() => {
+        this.handleAutoplay();
+      }, 100);
     } else if (prevClicked) {
-      this.handlePrevious();
+      this.stopMedia(this.currentStep);
       this.stepAutomation[this.currentStep].clear();
-      this.handleAutoplay();
+      this.handlePrevious();
+      setTimeout(() => {
+        this.handleAutoplay();
+      }, 100);
     } else if (autoplayClicked) {
       this.options.autoplay = !this.options.autoplay;
-      this.options.onAutoplay(this.options.autoplay);
       if (this.options.autoplay) {
-        // this.handleAutoplay();
+        this.playAudio(this.currentStep);
         this.stepAutomation[this.currentStep].resume();
       } else {
+        this.pauseAudio(this.currentStep);
         this.stepAutomation[this.currentStep].pause();
       }
       this.updatePlayButton();
+    }
+  }
+
+  /**
+ * Handler to stop audio & video
+ * @private
+ * @param {number} stepIndex
+ */
+  stopMedia(stepIndex) {
+    this.stopAudio(stepIndex);
+    this.stopVideo(stepIndex);
+  }
+
+  /**
+ * Handler to resume audio
+ * @private
+ * @param {number} stepIndex
+ */
+  playAudio(stepIndex) {
+    const audio = document.querySelector(`#audio${stepIndex}`);
+    if (audio) {
+      audio.play();
+    }
+  }
+
+  /**
+  * Handler to pause audio
+  * @private
+  * @param {number} stepIndex
+  */
+  pauseAudio(stepIndex) {
+    const audio = document.querySelector(`#audio${stepIndex}`);
+    if (audio) {
+      audio.pause();
+    }
+  }
+
+  /**
+   * Handler to stop audio
+   * @private
+   * @param {number} stepIndex
+   */
+  stopAudio(stepIndex) {
+    const audio = document.querySelector(`#audio${stepIndex}`);
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+  }
+
+  /**
+* Handler to resume video
+* @private
+* @param {number} stepIndex
+*/
+  playVideo(stepIndex) {
+    const video = document.querySelector(`#video${stepIndex}`);
+    if (video) {
+      video.play();
+    }
+  }
+
+  /**
+  * Handler to pause video
+  * @private
+  * @param {number} stepIndex
+  */
+  pauseVideo(stepIndex) {
+    const video = document.querySelector(`#video${stepIndex}`);
+    if (video) {
+      video.pause();
+    }
+  }
+
+  /**
+   * Handler to stop video
+   * @private
+   * @param {number} stepIndex
+   */
+  stopVideo(stepIndex) {
+    const video = document.querySelector(`#video${stepIndex}`);
+    if (video) {
+      video.pause();
+      video.currentTime = 0;
     }
   }
 
@@ -297,7 +386,6 @@ export default class Driver {
     this.stepAutomation.map(timer => timer.clear());
   }
 
-
   /**
   * Updates play/pause button icon
   * @private
@@ -373,6 +461,7 @@ export default class Driver {
    * @public
    */
   reset(immediate = false) {
+    this.stopMedia(this.currentStep);
     this.currentStep = 0;
     this.isActivated = false;
     this.clearStepAutomation();
