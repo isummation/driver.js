@@ -26,7 +26,6 @@ export default class Popover extends Element {
    */
   constructor(options, window, document, steps) {
     super();
-
     this.options = {
       isFirst: true,
       isLast: true,
@@ -75,6 +74,26 @@ export default class Popover extends Element {
     this.prevBtnNode = popover.querySelector(`.${CLASS_PREV_STEP_BTN}`);
     this.closeBtnNode = popover.querySelector(`.${CLASS_CLOSE_BTN}`);
     this.autoplayBtnNode = popover.querySelector(`.${CLASS_AUTOPLAY_BTN}`);
+    popover.appendChild(this.attachProgressBar());
+  }
+
+  attachProgressBar() {
+    const progressBar = document.createElement('div');
+    progressBar.style.display = 'flex';
+    progressBar.style.height = '10px';
+    progressBar.style.border = '1px solid';
+    for (let stepCount = 0; stepCount < this.options.steps.length; stepCount++) {
+      progressBar.appendChild(this.getProgressSegment());
+    }
+    return progressBar;
+  }
+
+  getProgressSegment() {
+    const progressSegment = document.createElement('div');
+    progressSegment.style.flex = 1;
+    progressSegment.style.backgroundColor = '#20a8d8';
+    progressSegment.style.marginRight = '2px';
+    return progressSegment;
   }
 
   /**

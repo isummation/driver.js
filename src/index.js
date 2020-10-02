@@ -375,7 +375,7 @@ export default class Driver {
   reset(immediate = false) {
     this.currentStep = 0;
     this.isActivated = false;
-    this.stepAutomation[this.currentStep].clear();
+    this.clearStepAutomation();
     this.overlay.clear(immediate);
   }
 

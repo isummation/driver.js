@@ -5,7 +5,9 @@ document.addEventListener('DOMContentLoaded', function () {
   const tourSteps = [
     {
       element: document.getElementById('driver-demo-head'),
-      duration: 3,
+      duration: 10,
+      audio: '',
+      video: '',
       popover: {
         className: 'scoped-driver-popover',
         title: 'Before we start',
@@ -15,20 +17,21 @@ document.addEventListener('DOMContentLoaded', function () {
       },
     }, {
       element: '#logo_img',
-      duration: 3,
+      duration: 10,
       popover: {
         title: 'Focus Anything',
         description: 'You can use it to highlight literally anything, images, text, div, span, li etc.',
       },
     },
-    //  {
-    //   element: '#name_driver',
-    //   popover: {
-    //     title: 'Why Driver?',
-    //     description: 'Because it lets you drive the user across the page',
-    //     duration: 3
-    //   }
-    // }, {
+    {
+      element: '#name_driver',
+      duration: 10,
+      popover: {
+        title: 'Why Driver?',
+        description: 'Because it lets you drive the user across the page',
+      }
+    },
+    // {
     //   element: '#driver-demo-head',
     //   popover: {
     //     title: 'Let\'s talk features',
@@ -119,6 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   const boringTourDriver = new Driver({
+    highlightContainer: '#sidebar',
     animate: false,
     opacity: 0.8,
     padding: 5,
