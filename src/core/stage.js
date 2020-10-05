@@ -88,7 +88,7 @@ export default class Stage extends Element {
     this.node.style.top = `${position.top - (requiredPadding / 2)}px`;
     this.node.style.left = `${position.left - (requiredPadding / 2)}px`;
     // this.node.style.backgroundColor = this.options.stageBackground;
-    this.node.style.backgroundColor = 'transparent';
+    this.node.style.backgroundColor = '#fff';
     this.node.style.border = `${requiredPadding}px solid ${this.options.stageBackground}`;
   }
 }
