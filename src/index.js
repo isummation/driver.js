@@ -212,6 +212,7 @@ export default class Driver {
     const audio = document.querySelector(`#audio${stepIndex}`);
     this.observeElement((obs) => {
       if (audio) {
+        console.log(audio);
         obs.disconnect();
         audio.play();
       }
@@ -400,8 +401,10 @@ export default class Driver {
     this.updatePlayButton();
     if (this.options.autoplay && this.options.steps[this.currentStep]) {
       this.updateProgressBar();
-      this.playAudio(this.currentStep);
-      this.playVideo(this.currentStep);
+      setTimeout(() => {
+        this.playAudio(this.currentStep);
+        this.playVideo(this.currentStep);
+      }, 0);
       this.stepAutomation[this.currentStep] = new this.Timer(() => {
         if (this.options.autoplay) {
           if (this.currentStep < this.steps.length - 1) {
