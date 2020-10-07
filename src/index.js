@@ -38,6 +38,7 @@ export default class Driver {
       overlayClickNext: SHOULD_OUTSIDE_CLICK_NEXT, // Whether to move next on click outside the element
       stageBackground: '#ffffff',       // Background color for the stage
       autoplay: false,       // Background color for the stage
+      runningProgressBar: {}, // progressBarStepInterval id
       onHighlightStarted: () => null,   // When element is about to be highlighted
       onHighlighted: () => null,        // When element has been highlighted
       onDeselected: () => null,         // When the element has been deselected
@@ -66,6 +67,7 @@ export default class Driver {
 
     // Event bindings
     this.bind();
+    this.initProgressBarOptions();
   }
 
   /**
@@ -103,6 +105,15 @@ export default class Driver {
     } else {
       this.window.addEventListener('touchstart', this.onClick, false);
     }
+  }
+
+  initProgressBarOptions() {
+    clearInterval(this.options.runningProgressBar.interval);
+    this.options.runningProgressBar = {
+      interval: undefined,
+      percentageFill: 0,
+      forStep: this.currentStep,
+    };
   }
 
   /**
@@ -150,27 +161,31 @@ export default class Driver {
     }
 
     if (nextClicked) {
-      this.stepAutomation[this.currentStep].clear();
+      if (this.stepAutomation[this.currentStep]) {
+        this.stepAutomation[this.currentStep].clear();
+      }
       this.stopMedia(this.currentStep);
       this.handleNext();
-      setTimeout(() => {
-        this.handleAutoplay();
-      }, 100);
+      // this.handleAutoplay();
     } else if (prevClicked) {
       this.stopMedia(this.currentStep);
       this.stepAutomation[this.currentStep].clear();
       this.handlePrevious();
-      setTimeout(() => {
-        this.handleAutoplay();
-      }, 100);
+      // this.handleAutoplay();
     } else if (autoplayClicked) {
       this.options.autoplay = !this.options.autoplay;
       if (this.options.autoplay) {
-        this.playAudio(this.currentStep);
-        this.stepAutomation[this.currentStep].resume();
+        if (this.stepAutomation[this.currentStep]) {
+          this.stepAutomation[this.currentStep].resume();
+          this.playAudio(this.currentStep);
+          this.updateProgressBar();
+        } else {
+          this.handleAutoplay();
+        }
       } else {
-        this.pauseAudio(this.currentStep);
         this.stepAutomation[this.currentStep].pause();
+        this.pauseAudio(this.currentStep);
+        this.pauseProgressBar();
       }
       this.updatePlayButton();
     }
@@ -325,6 +340,7 @@ export default class Driver {
 
     this.overlay.highlight(previousStep);
     this.currentStep -= 1;
+    this.handleAutoplay();
     setTimeout(() => {
       this.updatePlayButton();
     }, 500);
@@ -359,31 +375,91 @@ export default class Driver {
     this.moveNext();
   }
 
-  /**
+  /** step1 5/ step2 3 /step 3
  * Handles the internal "move to next" event
  * @private
  */
   handleAutoplay() {
-    this.updatePlayButton();
+    setTimeout(() => {
+      this.updatePlayButton();
+    }, 500);
     if (this.options.autoplay && this.options.steps[this.currentStep]) {
+      this.updateProgressBar();
+      setTimeout(() => {
+        this.playAudio(this.currentStep);
+        this.playVideo(this.currentStep);
+      }, 500);
       this.stepAutomation[this.currentStep] = new this.Timer(() => {
         if (this.options.autoplay) {
-          this.moveNext();
           if (this.currentStep < this.steps.length - 1) {
-            this.handleAutoplay();
+            this.handleNext();
+            // this.handleAutoplay();
           } else {
-            setTimeout(() => {
-              this.reset();
-            }, this.options.steps[this.currentStep].duration * 1000);
+            this.reset(true);
+            // this.updateProgressBar();
+            // this.resetTimeout = setTimeout(() => {
+            // }, this.options.steps[this.currentStep].duration * 1000);
           }
         }
       }, this.options.steps[this.currentStep].duration * 1000);
+    } else {
+      setTimeout(() => {
+        this.updatePreviousStepsProgress();
+      }, 500);
     }
   }
 
+  updateProgressBar() {
+    const delay = 500;
+    this.prevProgressTimer = setTimeout(() => {
+      if (this.options.runningProgressBar.forStep !== this.currentStep) {
+        this.initProgressBarOptions();
+      }
 
-  clearStepAutomation() {
-    this.stepAutomation.map(timer => timer.clear());
+      this.updatePreviousStepsProgress();
+
+      const progressBarStep = document.querySelector(`#progress${this.currentStep}`);
+      if (!progressBarStep) return;
+
+      let count = this.options.runningProgressBar.percentageFill;
+      const updateInterval = 100;
+      const duration = this.stepAutomation[this.currentStep]
+        ? this.stepAutomation[this.currentStep].getRemaining()
+        : this.steps[this.currentStep].options.duration;
+
+      const stepSize = Math.round(100 / ((duration - delay) / updateInterval));
+      this.options.runningProgressBar.interval = setInterval(() => {
+        count += stepSize;
+        count = count > 100 ? 100 : count;
+        this.options.runningProgressBar.percentageFill = count;
+        progressBarStep.style.width = `${count}%`;
+        if (count === 100) {
+          clearInterval(this.options.runningProgressBar.interval);
+        }
+      }, updateInterval);
+    }, delay);
+  }
+
+  updatePreviousStepsProgress() {
+    for (let i = 0; i <= this.currentStep - 1; i++) {
+      const progressBarStep = document.querySelector(`#progress${i}`);
+      if (progressBarStep) {
+        progressBarStep.style.width = '100%';
+      }
+    }
+  }
+
+  pauseProgressBar() {
+    clearInterval(this.options.runningProgressBar.interval);
+  }
+
+  clearAllTimers() {
+    this.stepAutomation.forEach(timer => timer.clear());
+    this.stepAutomation = [];
+    clearTimeout(this.resetTimeout);
+    clearTimeout(this.prevProgressTimer);
+    clearTimeout(this.prevProgressTimer);
+    clearInterval(this.options.runningProgressBar.interval);
   }
 
   /**
@@ -434,9 +510,10 @@ export default class Driver {
 
     this.overlay.highlight(nextStep);
     this.currentStep += 1;
-    setTimeout(() => {
-      this.updatePlayButton();
-    }, 500);
+    this.handleAutoplay();
+    // setTimeout(() => {
+    //   this.updatePlayButton();
+    // }, 500);
   }
 
   /**
@@ -462,9 +539,9 @@ export default class Driver {
    */
   reset(immediate = false) {
     this.stopMedia(this.currentStep);
+    this.clearAllTimers();
     this.currentStep = 0;
     this.isActivated = false;
-    this.clearStepAutomation();
     this.overlay.clear(immediate);
   }
 
@@ -639,6 +716,8 @@ export default class Driver {
     this.clear = () => {
       window.clearTimeout(timerId);
     };
+
+    this.getRemaining = () => (remaining);
 
     this.resume();
   }

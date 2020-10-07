@@ -13,6 +13,7 @@ import {
   CLASS_POPOVER_TITLE,
   CLASS_PREV_STEP_BTN,
   ID_POPOVER,
+  ID_PROGRESS_BAR,
   POPOVER_HTML,
 } from '../common/constants';
 import { createNodeFromString } from '../common/utils';
@@ -88,18 +89,25 @@ export default class Popover extends Element {
     // progressBar.style.border = '1px solid';
     progressBar.style.backgroundColor = '#ddd';
     progressBar.style.marginTop = '0.5rem';
+    progressBar.setAttribute('id', ID_PROGRESS_BAR);
     for (let stepCount = 0; stepCount < this.options.steps.length; stepCount++) {
-      // progressBar.appendChild(this.getProgressSegment());
+      progressBar.appendChild(this.getProgressSegment(stepCount));
     }
     return progressBar;
   }
 
-  getProgressSegment() {
+  getProgressSegment(step) {
     const progressSegment = document.createElement('div');
+    const progressSegmentFill = document.createElement('div');
+    progressSegmentFill.style.width = '0%';
+    progressSegmentFill.style.height = '100%';
+    progressSegmentFill.style.backgroundColor = '#20a8d8';
+    progressSegmentFill.setAttribute('id', `progress${step}`);
+
     progressSegment.style.flex = 1;
     progressSegment.style.border = '1px solid #b2b2b2';
-    // progressSegment.style.backgroundColor = '#20a8d8';
     progressSegment.style.marginRight = '2px';
+    progressSegment.appendChild(progressSegmentFill);
     return progressSegment;
   }
 
@@ -182,12 +190,12 @@ export default class Popover extends Element {
     this.titleNode.innerHTML = this.options.title;
     this.descriptionNode.innerHTML = this.options.description || '';
 
-    this.audioNode.innerHTML = this.options.audio ? `<audio autoplay id="audio${this.options.currentIndex}">
+    this.audioNode.innerHTML = this.options.audio ? `<audio id="audio${this.options.currentIndex}">
     <source src="${this.options.audio}" type="audio/wav">
     Your browser does not support the audio element.
     </audio>` : '';
 
-    this.videoNode.innerHTML = this.options.video ? `<video autoplay id="video${this.options.currentIndex}">
+    this.videoNode.innerHTML = this.options.video ? `<video id="video${this.options.currentIndex}">
     <source src="${this.options.video}" type="mp4/ogg">
     Your browser does not support the audio element.
     </video>` : '';

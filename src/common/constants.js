@@ -13,6 +13,7 @@ export const RIGHT_KEY_CODE = 39;
 export const ID_OVERLAY = 'driver-page-overlay';
 export const ID_STAGE = 'driver-highlighted-element-stage';
 export const ID_POPOVER = 'driver-popover-item';
+export const ID_PROGRESS_BAR = 'progressBar';
 
 export const CLASS_DRIVER_HIGHLIGHTED_ELEMENT = 'driver-highlighted-element';
 export const CLASS_POSITION_RELATIVE = 'driver-position-relative';
