@@ -178,6 +178,7 @@ export default class Driver {
         if (this.stepAutomation[this.currentStep]) {
           this.stepAutomation[this.currentStep].resume();
           this.playAudio(this.currentStep);
+          this.playVideo(this.currentStep);
           this.updateProgressBar();
         } else {
           this.handleAutoplay();
@@ -185,6 +186,7 @@ export default class Driver {
       } else {
         this.stepAutomation[this.currentStep].pause();
         this.pauseAudio(this.currentStep);
+        this.pauseVideo(this.currentStep);
         this.pauseProgressBar();
       }
       this.updatePlayButton();
@@ -208,9 +210,12 @@ export default class Driver {
  */
   playAudio(stepIndex) {
     const audio = document.querySelector(`#audio${stepIndex}`);
-    if (audio) {
-      audio.play();
-    }
+    this.observeElement((obs) => {
+      if (audio) {
+        obs.disconnect();
+        audio.play();
+      }
+    }, audio);
   }
 
   /**
@@ -220,9 +225,12 @@ export default class Driver {
   */
   pauseAudio(stepIndex) {
     const audio = document.querySelector(`#audio${stepIndex}`);
-    if (audio) {
-      audio.pause();
-    }
+    this.observeElement((obs) => {
+      if (audio) {
+        obs.disconnect();
+        audio.pause();
+      }
+    }, audio);
   }
 
   /**
@@ -232,10 +240,13 @@ export default class Driver {
    */
   stopAudio(stepIndex) {
     const audio = document.querySelector(`#audio${stepIndex}`);
-    if (audio) {
-      audio.pause();
-      audio.currentTime = 0;
-    }
+    this.observeElement((obs) => {
+      if (audio) {
+        obs.disconnect();
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    }, audio);
   }
 
   /**
@@ -245,9 +256,12 @@ export default class Driver {
 */
   playVideo(stepIndex) {
     const video = document.querySelector(`#video${stepIndex}`);
-    if (video) {
-      video.play();
-    }
+    this.observeElement((obs) => {
+      if (video) {
+        obs.disconnect();
+        video.play();
+      }
+    }, video);
   }
 
   /**
@@ -257,9 +271,12 @@ export default class Driver {
   */
   pauseVideo(stepIndex) {
     const video = document.querySelector(`#video${stepIndex}`);
-    if (video) {
-      video.pause();
-    }
+    this.observeElement((obs) => {
+      if (video) {
+        obs.disconnect();
+        video.pause();
+      }
+    }, video);
   }
 
   /**
@@ -269,10 +286,13 @@ export default class Driver {
    */
   stopVideo(stepIndex) {
     const video = document.querySelector(`#video${stepIndex}`);
-    if (video) {
-      video.pause();
-      video.currentTime = 0;
-    }
+    this.observeElement((obs) => {
+      if (video) {
+        obs.disconnect();
+        video.pause();
+        video.currentTime = 0;
+      }
+    }, video);
   }
 
   /**
@@ -341,9 +361,6 @@ export default class Driver {
     this.overlay.highlight(previousStep);
     this.currentStep -= 1;
     this.handleAutoplay();
-    setTimeout(() => {
-      this.updatePlayButton();
-    }, 500);
   }
 
   /**
@@ -380,72 +397,66 @@ export default class Driver {
  * @private
  */
   handleAutoplay() {
-    setTimeout(() => {
-      this.updatePlayButton();
-    }, 500);
+    this.updatePlayButton();
     if (this.options.autoplay && this.options.steps[this.currentStep]) {
       this.updateProgressBar();
-      setTimeout(() => {
-        this.playAudio(this.currentStep);
-        this.playVideo(this.currentStep);
-      }, 500);
+      this.playAudio(this.currentStep);
+      this.playVideo(this.currentStep);
       this.stepAutomation[this.currentStep] = new this.Timer(() => {
         if (this.options.autoplay) {
           if (this.currentStep < this.steps.length - 1) {
             this.handleNext();
-            // this.handleAutoplay();
           } else {
             this.reset(true);
-            // this.updateProgressBar();
-            // this.resetTimeout = setTimeout(() => {
-            // }, this.options.steps[this.currentStep].duration * 1000);
           }
         }
       }, this.options.steps[this.currentStep].duration * 1000);
     } else {
-      setTimeout(() => {
-        this.updatePreviousStepsProgress();
-      }, 500);
+      this.updatePreviousStepsProgress();
     }
   }
 
   updateProgressBar() {
     const delay = 500;
     this.prevProgressTimer = setTimeout(() => {
-      if (this.options.runningProgressBar.forStep !== this.currentStep) {
-        this.initProgressBarOptions();
-      }
-
-      this.updatePreviousStepsProgress();
-
       const progressBarStep = document.querySelector(`#progress${this.currentStep}`);
-      if (!progressBarStep) return;
+      this.observeElement((obs) => {
+        if (progressBarStep) {
+          obs.disconnect();
+          if (this.options.runningProgressBar.forStep !== this.currentStep) {
+            this.initProgressBarOptions();
+          }
 
-      let count = this.options.runningProgressBar.percentageFill;
-      const updateInterval = 100;
-      const duration = this.stepAutomation[this.currentStep]
-        ? this.stepAutomation[this.currentStep].getRemaining()
-        : this.steps[this.currentStep].options.duration;
+          this.updatePreviousStepsProgress();
 
-      const stepSize = Math.round(100 / ((duration - delay) / updateInterval));
-      this.options.runningProgressBar.interval = setInterval(() => {
-        count += stepSize;
-        count = count > 100 ? 100 : count;
-        this.options.runningProgressBar.percentageFill = count;
-        progressBarStep.style.width = `${count}%`;
-        if (count === 100) {
-          clearInterval(this.options.runningProgressBar.interval);
+          if (!progressBarStep) return;
+
+          let count = this.options.runningProgressBar.percentageFill;
+          const updateInterval = 100;
+          const duration = this.stepAutomation[this.currentStep]
+            ? this.stepAutomation[this.currentStep].getRemaining()
+            : this.steps[this.currentStep].options.duration;
+          const stepSize = 100 / (((duration) - delay) / updateInterval);
+          this.options.runningProgressBar.interval = setInterval(() => {
+            count += stepSize;
+            count = count > 100 ? 100 : count;
+            this.options.runningProgressBar.percentageFill = count;
+            progressBarStep.style.width = `${count}%`;
+            if (count === 100) {
+              clearInterval(this.options.runningProgressBar.interval);
+            }
+          }, updateInterval);
         }
-      }, updateInterval);
+      }, progressBarStep);
     }, delay);
   }
 
   updatePreviousStepsProgress() {
     for (let i = 0; i <= this.currentStep - 1; i++) {
       const progressBarStep = document.querySelector(`#progress${i}`);
-      if (progressBarStep) {
+      this.observeElement(() => {
         progressBarStep.style.width = '100%';
-      }
+      }, progressBarStep);
     }
   }
 
@@ -467,14 +478,36 @@ export default class Driver {
   * @private
   */
   updatePlayButton() {
-    const autoplayBtn = document.getElementsByClassName(CLASS_AUTOPLAY_BTN)[0];
-    if (this.options.autoplay) {
-      autoplayBtn.classList.remove('pause');
-    } else {
-      autoplayBtn.classList.add('pause');
-    }
+    const playbutton = document.querySelector(`.${CLASS_AUTOPLAY_BTN}`);
+    const update = (obs) => {
+      if (playbutton) {
+        obs.disconnect();
+        if (this.options.autoplay) {
+          playbutton.classList.remove('pause');
+        } else {
+          playbutton.classList.add('pause');
+        }
+      }
+    };
+    this.observeElement(update, playbutton);
   }
 
+  /**
+   * Observes if the element is appeared in the dom
+   * @param {callback} function
+   * @param {targetElement} HTMLElement
+   */
+  observeElement(callback, targetElement) {
+    // Options for the observer (which mutations to observe)
+    const config = { attributes: true, childList: true, subtree: true };
+    const observer = new MutationObserver(() => {
+      if (document.contains(targetElement)) {
+        callback(observer);
+      }
+    });
+    observer.observe(document, config);
+    callback(observer);
+  }
 
   /**
    * Handles the internal "move to previous" event
@@ -511,9 +544,6 @@ export default class Driver {
     this.overlay.highlight(nextStep);
     this.currentStep += 1;
     this.handleAutoplay();
-    // setTimeout(() => {
-    //   this.updatePlayButton();
-    // }, 500);
   }
 
   /**
@@ -675,9 +705,7 @@ export default class Driver {
     this.overlay.highlight(this.steps[index]);
 
     if (this.options.autoplay) {
-      setTimeout(() => {
-        this.handleAutoplay();
-      }, 100);
+      this.handleAutoplay();
     }
   }
 
