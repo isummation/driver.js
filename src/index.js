@@ -210,13 +210,9 @@ export default class Driver {
  */
   playAudio(stepIndex) {
     const audio = document.querySelector(`#audio${stepIndex}`);
-    this.observeElement((obs) => {
-      if (audio) {
-        console.log(audio);
-        obs.disconnect();
-        audio.play();
-      }
-    }, audio);
+    if (audio) {
+      audio.play();
+    }
   }
 
   /**
@@ -226,12 +222,9 @@ export default class Driver {
   */
   pauseAudio(stepIndex) {
     const audio = document.querySelector(`#audio${stepIndex}`);
-    this.observeElement((obs) => {
-      if (audio) {
-        obs.disconnect();
-        audio.pause();
-      }
-    }, audio);
+    if (audio) {
+      audio.pause();
+    }
   }
 
   /**
@@ -241,13 +234,10 @@ export default class Driver {
    */
   stopAudio(stepIndex) {
     const audio = document.querySelector(`#audio${stepIndex}`);
-    this.observeElement((obs) => {
-      if (audio) {
-        obs.disconnect();
-        audio.pause();
-        audio.currentTime = 0;
-      }
-    }, audio);
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
   }
 
   /**
@@ -272,12 +262,9 @@ export default class Driver {
   */
   pauseVideo(stepIndex) {
     const video = document.querySelector(`#video${stepIndex}`);
-    this.observeElement((obs) => {
-      if (video) {
-        obs.disconnect();
-        video.pause();
-      }
-    }, video);
+    if (video) {
+      video.pause();
+    }
   }
 
   /**
@@ -287,13 +274,10 @@ export default class Driver {
    */
   stopVideo(stepIndex) {
     const video = document.querySelector(`#video${stepIndex}`);
-    this.observeElement((obs) => {
-      if (video) {
-        obs.disconnect();
-        video.pause();
-        video.currentTime = 0;
-      }
-    }, video);
+    if (video) {
+      video.pause();
+      video.currentTime = 0;
+    }
   }
 
   /**
@@ -404,7 +388,7 @@ export default class Driver {
       setTimeout(() => {
         this.playAudio(this.currentStep);
         this.playVideo(this.currentStep);
-      }, 0);
+      }, 500);
       this.stepAutomation[this.currentStep] = new this.Timer(() => {
         if (this.options.autoplay) {
           if (this.currentStep < this.steps.length - 1) {

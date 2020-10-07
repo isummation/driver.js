@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const tourSteps = [
     {
       element: document.getElementById('driver-demo-head'),
-      duration: 30,
+      duration: 12,
       popover: {
         className: 'scoped-driver-popover',
         title: 'Before we start',
