@@ -101,7 +101,7 @@ export default class Popover extends Element {
     const progressSegmentFill = document.createElement('div');
     progressSegmentFill.style.width = '0%';
     progressSegmentFill.style.height = '100%';
-    progressSegmentFill.style.backgroundColor = '#20a8d8';
+    progressSegmentFill.style.backgroundColor = '#4799eb';
     progressSegmentFill.setAttribute('id', `progress${step}`);
 
     progressSegment.style.flex = 1;
