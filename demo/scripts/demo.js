@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const tourSteps = [
     {
       element: document.getElementById('driver-demo-head'),
+      indicator: '#driver-demo-head',
       duration: 12,
       popover: {
         className: 'scoped-driver-popover',
@@ -16,7 +17,8 @@ document.addEventListener('DOMContentLoaded', function () {
         nextBtnText: '',
       },
     }, {
-      element: '#logo_img',
+      element: document.getElementById('driver-demo-head'),
+      indicator: '#logo_img',
       duration: 6,
       popover: {
         title: 'Focus Anything',
@@ -25,7 +27,8 @@ document.addEventListener('DOMContentLoaded', function () {
       },
     },
     {
-      element: '#name_driver',
+      element: document.getElementById('driver-demo-head'),
+      indicator: '#name_driver',
       duration: 5,
       popover: {
         title: 'Why Driver?',
@@ -119,6 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
     stageBackground: "#20a8d8",
     autoplay: true,
     doneBtnText: '',
+    indicatorPosition: 'right'
   });
 
   const boringTourDriver = new Driver({
@@ -128,6 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
     padding: 5,
     showButtons: true,
     className: 'boring-scope',
+    indicatorPosition: 'right'
   });
 
   boringTourDriver.defineSteps(tourSteps);

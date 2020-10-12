@@ -382,6 +382,7 @@ export default class Driver {
  * @private
  */
   handleAutoplay() {
+    this.attachIndicator();
     this.updatePlayButton();
     if (this.options.autoplay && this.options.steps[this.currentStep]) {
       this.updateProgressBar();
@@ -530,6 +531,7 @@ export default class Driver {
 
     this.overlay.highlight(nextStep);
     this.currentStep += 1;
+    this.attachIndicator();
     this.handleAutoplay();
   }
 
@@ -555,6 +557,7 @@ export default class Driver {
    * @public
    */
   reset(immediate = false) {
+    this.removePreviousIndicator();
     this.stopMedia(this.currentStep);
     this.clearAllTimers();
     this.currentStep = 0;
@@ -735,5 +738,45 @@ export default class Driver {
     this.getRemaining = () => (remaining);
 
     this.resume();
+  }
+
+  removePreviousIndicator() {
+    const prevIndicator = document.querySelector('#tourIndicator');
+    if (prevIndicator) prevIndicator.remove();
+  }
+
+  attachIndicator() {
+    const position = this.options.indicatorPosition;
+    this.removePreviousIndicator();
+    const domRect = document.querySelector(this.options.steps[this.currentStep].indicator).getBoundingClientRect();
+    const div = document.createElement('div');
+    div.setAttribute('id', 'tourIndicator');
+    div.style.position = 'fixed';
+    if (position === 'top') {
+      div.style.top = `${domRect.y}px`;
+      div.style.left = `${domRect.x + domRect.width / 2}px`;
+      div.style.transform = 'translate(0%,-20%)';
+      div.innerHTML = '&larr;';
+    } else if (position === 'right') {
+      div.style.top = `${domRect.y + domRect.height / 2}px`;
+      div.style.left = `${domRect.x + domRect.width}px`;
+      div.style.transform = 'translate(0%,-50%)';
+      div.innerHTML = '&larr;';
+    } else if (position === 'bottom') {
+      div.style.top = `${domRect.y + domRect.height}px`;
+      div.style.left = `${domRect.x + domRect.width / 2}px`;
+      div.style.transform = 'translate(0%,20%)';
+      div.innerHTML = '&larr;';
+    } else {
+      div.style.top = `${domRect.y + domRect.height / 2}px`;
+      div.style.left = `${domRect.x}px`;
+      div.style.transform = 'translate(-100%, -50%)';
+      div.innerHTML = '&rarr;';
+    }
+    div.style.fontSize = '100px';
+    div.style.zIndex = '100006';
+    div.style.color = '#f00';
+    const body = document.querySelector('body');
+    body.appendChild(div);
   }
 }
