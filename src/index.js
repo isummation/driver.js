@@ -39,6 +39,8 @@ export default class Driver {
       stageBackground: '#ffffff',       // Background color for the stage
       autoplay: false,       // Background color for the stage
       runningProgressBar: {}, // progressBarStepInterval id
+      leftOffset: 0,
+      topOffset: 0,
       onHighlightStarted: () => null,   // When element is about to be highlighted
       onHighlighted: () => null,        // When element has been highlighted
       onDeselected: () => null,         // When the element has been deselected
@@ -753,27 +755,28 @@ export default class Driver {
     div.setAttribute('id', 'tourIndicator');
     div.style.position = 'fixed';
     if (position === 'top') {
-      div.style.top = `${domRect.y}px`;
-      div.style.left = `${domRect.x + domRect.width / 2}px`;
+      div.style.top = `${domRect.y + this.options.topOffset}px`;
+      div.style.left = `${domRect.x + domRect.width / 2 + this.options.leftOffset}px`;
       div.style.transform = 'translate(0%,-20%)';
       div.innerHTML = '&larr;';
     } else if (position === 'right') {
-      div.style.top = `${domRect.y + domRect.height / 2}px`;
-      div.style.left = `${domRect.x + domRect.width}px`;
+      div.style.top = `${domRect.y + domRect.height / 2 + this.options.topOffset}px`;
+      div.style.left = `${domRect.x + domRect.width + this.options.leftOffset}px`;
       div.style.transform = 'translate(0%,-50%)';
       div.innerHTML = '&larr;';
     } else if (position === 'bottom') {
-      div.style.top = `${domRect.y + domRect.height}px`;
-      div.style.left = `${domRect.x + domRect.width / 2}px`;
+      div.style.top = `${domRect.y + domRect.height + this.options.topOffset}px`;
+      div.style.left = `${domRect.x + domRect.width / 2 + this.options.leftOffset}px`;
       div.style.transform = 'translate(0%,20%)';
       div.innerHTML = '&larr;';
     } else {
-      div.style.top = `${domRect.y + domRect.height / 2}px`;
-      div.style.left = `${domRect.x}px`;
+      div.style.top = `${domRect.y + domRect.height / 2 + this.options.topOffset}px`;
+      div.style.left = `${domRect.x + this.options.leftOffset}px`;
       div.style.transform = 'translate(-100%, -50%)';
       div.innerHTML = '&rarr;';
     }
-    div.style.fontSize = '100px';
+    div.style.fontSize = `${this.options.indicatorSize}rem`;
+    div.style.pointer = 'default';
     div.style.zIndex = '100006';
     div.style.color = '#f00';
     const body = document.querySelector('body');
