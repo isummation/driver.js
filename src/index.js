@@ -444,8 +444,11 @@ export default class Driver {
   updatePreviousStepsProgress() {
     for (let i = 0; i <= this.currentStep - 1; i++) {
       const progressBarStep = document.querySelector(`#progress${i}`);
-      this.observeElement(() => {
-        progressBarStep.style.width = '100%';
+      this.observeElement((obs) => {
+        if (progressBarStep) {
+          obs.disconnect();
+          progressBarStep.style.width = '100%';
+        }
       }, progressBarStep);
     }
   }
@@ -494,6 +497,10 @@ export default class Driver {
       if (document.contains(targetElement)) {
         callback(observer);
       }
+      setTimeout(() => {
+        // observe mutation max upto 2 second
+        observer.disconnect();
+      }, 2000);
     });
     observer.observe(document, config);
     callback(observer);
